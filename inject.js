@@ -39,8 +39,10 @@ module.exports = function (createHandlers) {
       getAddress: function() {
         const scopes = ['device', 'private', 'public']  // TODO: get from multiserver-scopes
         const wsAddresses = scopes.reduce( (acc, scope) => {
-          const addresses = decode(sbot.getAddress(scope))
-          acc = acc.concat(addresses.find(stack=>{
+          const a = sbot.getAddress(scope)
+          if (!a) return acc
+          const addresses = decode(a)
+          acc = acc.concat(addresses.filter(stack=>{
             return stack[0].name == 'ws'
           }))
           return acc
